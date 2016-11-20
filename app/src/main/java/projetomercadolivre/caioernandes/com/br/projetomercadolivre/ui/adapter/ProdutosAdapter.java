@@ -36,8 +36,8 @@ public class ProdutosAdapter extends ArrayAdapter<Produto> {
         TextView txtPreco = (TextView) convertView.findViewById(R.id.item_produto_preco);
 
         if (produto != null) {
-            Glide.with(getContext()).load(produto.thumbnail).into(imgFoto);
-            txtTitulo.setText(produto.title);
+            Glide.with(getContext()).load(produto.foto).into(imgFoto);
+            txtTitulo.setText(produto.titulo);
             txtPreco.setText(produto.precoConvertido());
         }
 

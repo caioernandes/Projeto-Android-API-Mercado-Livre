@@ -1,33 +1,42 @@
 package projetomercadolivre.caioernandes.com.br.projetomercadolivre.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.text.NumberFormat;
 
 
 public class Produto {
 
+    @SerializedName("id")
     public String id;
-    public String title;
-    public double price;
-    public String condition;
-    public String permalink;
-    public String thumbnail;
-    public Endereco seller_address;
+    @SerializedName("title")
+    public String titulo;
+    @SerializedName("price")
+    public double preco;
+    @SerializedName("condition")
+    public String condicao;
+    @SerializedName("permalink")
+    public String linkCompra;
+    @SerializedName("thumbnail")
+    public String foto;
+    @SerializedName("seller_address")
+    public Endereco endereco;
 
     public String precoConvertido() {
-        return NumberFormat.getCurrencyInstance().format(price);
+        return NumberFormat.getCurrencyInstance().format(preco);
     }
 
     public Produto() {
-        seller_address = new Endereco();
+        endereco = new Endereco();
     }
 
-    public Produto(String id, String title, double price, String condition, String permalink, String thumbnail, Endereco seller_address) {
+    public Produto(String id, String titulo, double preco, String condicao, String linkCompra, String foto, Endereco endereco) {
         this.id = id;
-        this.title = title;
-        this.price = price;
-        this.condition = condition;
-        this.permalink = permalink;
-        this.thumbnail = thumbnail;
-        this.seller_address = seller_address;
+        this.titulo = titulo;
+        this.preco = preco;
+        this.condicao = condicao;
+        this.linkCompra = linkCompra;
+        this.foto = foto;
+        this.endereco = endereco;
     }
 }
