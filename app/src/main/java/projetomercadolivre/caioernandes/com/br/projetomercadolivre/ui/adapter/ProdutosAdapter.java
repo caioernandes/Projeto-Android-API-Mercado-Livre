@@ -16,9 +16,6 @@ import java.util.List;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.R;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.model.Produto;
 
-/**
- * Created by Caio Ernandes on 20/11/2016.
- */
 
 public class ProdutosAdapter extends ArrayAdapter<Produto> {
     public ProdutosAdapter(Context context, List<Produto> produtos) {
@@ -38,9 +35,11 @@ public class ProdutosAdapter extends ArrayAdapter<Produto> {
         TextView txtTitulo = (TextView) convertView.findViewById(R.id.item_produto_titulo);
         TextView txtPreco = (TextView) convertView.findViewById(R.id.item_produto_preco);
 
-        Glide.with(getContext()).load(produto.thumbnail).into(imgFoto);
-        txtTitulo.setText(produto.title);
-        txtPreco.setText(produto.precoConvertido());
+        if (produto != null) {
+            Glide.with(getContext()).load(produto.thumbnail).into(imgFoto);
+            txtTitulo.setText(produto.title);
+            txtPreco.setText(produto.precoConvertido());
+        }
 
         return convertView;
     }

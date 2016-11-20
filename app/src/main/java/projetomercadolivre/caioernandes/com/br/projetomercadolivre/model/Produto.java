@@ -21,7 +21,7 @@ public class Produto {
         seller_address = new Endereco();
     }
 
-    public Produto(String id, String title, double price, String condition, String permalink, String thumbnailm, Endereco seller_address) {
+    public Produto(String id, String title, double price, String condition, String permalink, String thumbnail, Endereco seller_address) {
         this.id = id;
         this.title = title;
         this.price = price;
