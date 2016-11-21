@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ProjetoMercadoLivre</string>
+    <string name="hint_search">Buscar</string>
 </resources>

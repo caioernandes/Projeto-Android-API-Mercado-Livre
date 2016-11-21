@@ -1,20 +1,26 @@
 package projetomercadolivre.caioernandes.com.br.projetomercadolivre;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ListView;
 
-import java.io.IOException;
 import java.util.List;
 
-import projetomercadolivre.caioernandes.com.br.projetomercadolivre.http.ProdutosParser;
+import projetomercadolivre.caioernandes.com.br.projetomercadolivre.http.ProdutosSearchTask;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.model.Produto;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.ui.adapter.ProdutosAdapter;
 
-public class ProdutosActivity extends AppCompatActivity {
+public class ProdutosActivity extends AppCompatActivity
+        implements LoaderManager.LoaderCallbacks<List<Produto>>, SearchView.OnQueryTextListener {
 
     ListView mListProdutos;
+    LoaderManager mLoaderManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,29 +28,50 @@ public class ProdutosActivity extends AppCompatActivity {
         setContentView(R.layout.activity_produtos);
 
         mListProdutos = (ListView) findViewById(R.id.listProdutos);
-        new ProdutosSearchTask().execute("informatica");
+
+        mLoaderManager = getSupportLoaderManager();
+        mLoaderManager.initLoader(0, null, this);
     }
 
-    class ProdutosSearchTask extends AsyncTask<String, Void, List<Produto>> {
+    @Override
+    public Loader<List<Produto>> onCreateLoader(int id, Bundle args) {
+        String query = args != null ? args.getString("q") : null;
+        return new ProdutosSearchTask(this, query);
+    }
 
-        @Override
-        protected List<Produto> doInBackground(String... params) {
-            try {
-                List<Produto> produtos = ProdutosParser.searchByTitle(params[0]);
-                return produtos;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
+    @Override
+    public void onLoadFinished(Loader<List<Produto>> loader, List<Produto> data) {
+        if (data != null) {
+            mListProdutos.setAdapter(new ProdutosAdapter(ProdutosActivity.this, data));
         }
+    }
 
-        @Override
-        protected void onPostExecute(List<Produto> produtos) {
-            super.onPostExecute(produtos);
+    @Override
+    public void onLoaderReset(Loader<List<Produto>> loader) {
 
-            if (produtos != null) {
-                mListProdutos.setAdapter(new ProdutosAdapter(ProdutosActivity.this, produtos));
-            }
-        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_search, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(this);
+
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        Bundle bundle = new Bundle();
+        bundle.putString("q", query);
+        mLoaderManager.restartLoader(0, bundle, this);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String query) {
+        return false;
     }
 }

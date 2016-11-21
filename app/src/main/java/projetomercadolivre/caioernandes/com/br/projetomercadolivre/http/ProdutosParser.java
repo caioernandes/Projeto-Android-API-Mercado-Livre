@@ -9,13 +9,14 @@ import java.util.List;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import projetomercadolivre.caioernandes.com.br.projetomercadolivre.model.Constantes;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.model.Produto;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.model.ProdutoSearchResult;
 
 
 public class ProdutosParser {
 
-    private static final String URL_SEARCH = "https://api.mercadolibre.com/sites/MLB/search?q=%s";
+
 
     public static List<Produto> searchByTitle(String q) throws IOException {
 
@@ -23,7 +24,8 @@ public class ProdutosParser {
         OkHttpClient client = new OkHttpClient();
 
         //fazendo requisicao ao servidor
-        Request request = new Request.Builder().url(String.format(URL_SEARCH, q)).build();
+        String urlApi = String.format(Constantes.URL_SEARCH, q, Constantes.CATEGORY_INFORMATICA);
+        Request request = new Request.Builder().url(urlApi).build();
 
         //resposta do servidor
         Response response = client.newCall(request).execute();
