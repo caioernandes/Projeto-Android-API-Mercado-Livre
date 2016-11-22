@@ -16,8 +16,6 @@ import projetomercadolivre.caioernandes.com.br.projetomercadolivre.model.Produto
 
 public class ProdutosParser {
 
-
-
     public static List<Produto> searchByTitle(String q) throws IOException {
 
         //estabelece a conexão com o servidor
