@@ -21,6 +21,10 @@ public class Produto {
     public String foto;
     @SerializedName("seller_address")
     public Endereco endereco;
+    @SerializedName("accepts_mercadopago")
+    public Boolean aceitaMercadoPago;
+    @SerializedName("available_quantity")
+    public int quantidadeDisponivel;
 
     public String precoConvertido() {
         return NumberFormat.getCurrencyInstance().format(preco);
@@ -30,7 +34,8 @@ public class Produto {
         endereco = new Endereco();
     }
 
-    public Produto(String id, String titulo, double preco, String condicao, String linkCompra, String foto, Endereco endereco) {
+    public Produto(String id, String titulo, double preco, String condicao, String linkCompra,
+                   String foto, Endereco endereco, Boolean aceitaMercadoPago, int quantidadeDisponivel) {
         this.id = id;
         this.titulo = titulo;
         this.preco = preco;
@@ -38,5 +43,7 @@ public class Produto {
         this.linkCompra = linkCompra;
         this.foto = foto;
         this.endereco = endereco;
+        this.aceitaMercadoPago = aceitaMercadoPago;
+        this.quantidadeDisponivel = quantidadeDisponivel;
     }
 }
