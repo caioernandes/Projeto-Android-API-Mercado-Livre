@@ -42,4 +42,31 @@ public class ProdutosParser {
 
         return null;
     }
+
+    public static Produto searchById(String q) throws IOException {
+
+        //estabelece a conexão com o servidor
+        OkHttpClient client = new OkHttpClient();
+
+        //fazendo requisicao ao servidor
+        String urlApi = String.format(Constantes.URL_SEARCH_ID, q);
+        Request request = new Request.Builder().url(urlApi).build();
+
+        //resposta do servidor
+        Response response = client.newCall(request).execute();
+
+        //verificando se não houve erro de conexão
+        if (response.networkResponse().code() == HttpURLConnection.HTTP_OK) {
+            String json = response.body().string();
+
+            //converter o result json em obj java
+            Gson gson = new Gson();
+            Produto result = gson.fromJson(json, Produto.class);
+
+            if (result != null)
+                return result;
+        }
+
+        return null;
+    }
 }

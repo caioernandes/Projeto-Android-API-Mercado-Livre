@@ -3,39 +3,42 @@ package projetomercadolivre.caioernandes.com.br.projetomercadolivre.http;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
-import java.util.List;
+import android.util.Log;
+
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.model.Produto;
 
-public class ProdutosSearchTask extends AsyncTaskLoader<List<Produto>> {
+public class ProdutosByIdTask extends AsyncTaskLoader<Produto> {
 
-    private List<Produto> mProdutos;
-    private String mQuery;
+    private Produto mProduto;
+    private String mId;
 
-    public ProdutosSearchTask(Context context, String q) {
+    public ProdutosByIdTask(Context context, String id) {
         super(context);
-        mQuery = q;
+        mId = id;
     }
 
     @Override
     protected void onStartLoading() {
         super.onStartLoading();
 
-        if (mQuery == null) return;
+        if (mId == null) return;
 
-        if (mProdutos == null) {
+        if (mProduto == null) {
+            Log.d("CAIO", "forceLoad");
             forceLoad();
         } else {
-            deliverResult(mProdutos);
+            Log.d("CAIO", "deliverResult");
+            deliverResult(mProduto);
         }
     }
 
     @Override
-    public List<Produto> loadInBackground() {
+    public Produto loadInBackground() {
         try {
-            mProdutos = ProdutosParser.searchByTitle(mQuery);
+            mProduto = ProdutosParser.searchById(mId);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return mProdutos;
+        return mProduto;
     }
 }
