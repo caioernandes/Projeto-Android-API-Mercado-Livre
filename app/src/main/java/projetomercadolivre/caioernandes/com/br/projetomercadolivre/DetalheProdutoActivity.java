@@ -9,19 +9,31 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.http.ProdutosByIdTask;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.model.Constantes;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.model.Produto;
 
 public class DetalheProdutoActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Produto> {
 
+    @BindView(R.id.text_titulo) TextView textTitulo;
+    @BindView(R.id.text_preco) TextView textPreco;
+    @BindView(R.id.text_qtd) TextView textQuantidade;
+    @BindView(R.id.image_foto) ImageView imageFoto;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalhe_produto);
+        ButterKnife.bind(this);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -51,10 +63,12 @@ public class DetalheProdutoActivity extends AppCompatActivity implements LoaderM
     @Override
     public void onLoadFinished(Loader<Produto> loader, Produto data) {
         if (data != null) {
-            TextView textView = (TextView) findViewById(R.id.qualquercoisa);
-            textView.setText(data.titulo);
+            textTitulo.setText(data.titulo);
+            textPreco.setText(data.precoConvertido());
+            textQuantidade.setText(data.quantidadeDisponivel());
+            Glide.with(this).load(data.foto).into(imageFoto);
         } else {
-            Toast.makeText(this, "Deu pau!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Erro ao carregar informações.", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -27,7 +27,18 @@ public class Produto {
     public int quantidadeDisponivel;
 
     public String precoConvertido() {
-        return NumberFormat.getCurrencyInstance().format(preco);
+        return "Preço: " + NumberFormat.getCurrencyInstance().format(preco);
+    }
+
+    public String quantidadeDisponivel() {
+        String retorno = null;
+
+        if(quantidadeDisponivel > 1)
+            retorno = Integer.toString(quantidadeDisponivel) + " produtos disponíveis.";
+        else if (quantidadeDisponivel == 1)
+            retorno = Integer.toString(quantidadeDisponivel) + " produto disponível.";
+
+        return retorno;
     }
 
     public Produto() {
