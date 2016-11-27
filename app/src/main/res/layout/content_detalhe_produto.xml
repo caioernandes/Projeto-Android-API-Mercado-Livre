@@ -4,31 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/scroll_detalhe"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="projetomercadolivre.caioernandes.com.br.projetomercadolivre.DetalheProdutoActivity"
     tools:showIn="@layout/activity_detalhe_produto">
 
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:padding="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
         <TextView
             android:layout_width="287dp"
             android:layout_height="wrap_content"
             android:id="@+id/text_titulo" />
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/text_preco" />
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/text_qtd" />
-
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

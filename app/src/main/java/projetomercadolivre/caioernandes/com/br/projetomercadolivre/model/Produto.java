@@ -27,7 +27,7 @@ public class Produto {
     public int quantidadeDisponivel;
 
     public String precoConvertido() {
-        return "Preço: " + NumberFormat.getCurrencyInstance().format(preco);
+        return NumberFormat.getCurrencyInstance().format(preco);
     }
 
     public String quantidadeDisponivel() {

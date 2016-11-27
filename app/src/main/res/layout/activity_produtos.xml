@@ -10,9 +10,10 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="projetomercadolivre.caioernandes.com.br.projetomercadolivre.ProdutosActivity">
 
-    <ListView
-        android:id="@+id/listProdutos"
+    <fragment
+        android:id="@+id/fragment_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:name="projetomercadolivre.caioernandes.com.br.projetomercadolivre.ProdutoListFragment" />
 
 </RelativeLayout>
