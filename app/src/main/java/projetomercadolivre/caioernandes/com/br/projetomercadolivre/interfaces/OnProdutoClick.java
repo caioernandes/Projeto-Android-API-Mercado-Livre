@@ -1,4 +1,4 @@
-package projetomercadolivre.caioernandes.com.br.projetomercadolivre;
+package projetomercadolivre.caioernandes.com.br.projetomercadolivre.interfaces;
 
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.model.Produto;
 

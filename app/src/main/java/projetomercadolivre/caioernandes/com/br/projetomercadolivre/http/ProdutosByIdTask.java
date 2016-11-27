@@ -3,7 +3,6 @@ package projetomercadolivre.caioernandes.com.br.projetomercadolivre.http;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
-import android.util.Log;
 
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.model.Produto;
 
@@ -24,10 +23,8 @@ public class ProdutosByIdTask extends AsyncTaskLoader<Produto> {
         if (mId == null) return;
 
         if (mProduto == null) {
-            Log.d("CAIO", "forceLoad");
             forceLoad();
         } else {
-            Log.d("CAIO", "deliverResult");
             deliverResult(mProduto);
         }
     }

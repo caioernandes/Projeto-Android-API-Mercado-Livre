@@ -1,4 +1,4 @@
-package projetomercadolivre.caioernandes.com.br.projetomercadolivre;
+package projetomercadolivre.caioernandes.com.br.projetomercadolivre.fragments;
 
 
 import android.os.Bundle;
@@ -22,6 +22,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import projetomercadolivre.caioernandes.com.br.projetomercadolivre.interfaces.OnProdutoClick;
+import projetomercadolivre.caioernandes.com.br.projetomercadolivre.R;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.http.ProdutosSearchTask;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.model.Produto;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.ui.adapter.ProdutosAdapter;

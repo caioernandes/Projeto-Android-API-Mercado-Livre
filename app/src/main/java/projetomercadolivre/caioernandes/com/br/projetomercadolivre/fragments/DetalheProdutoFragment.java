@@ -1,4 +1,4 @@
-package projetomercadolivre.caioernandes.com.br.projetomercadolivre;
+package projetomercadolivre.caioernandes.com.br.projetomercadolivre.fragments;
 
 
 import android.os.Bundle;
@@ -24,6 +24,7 @@ import com.bumptech.glide.Glide;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import projetomercadolivre.caioernandes.com.br.projetomercadolivre.R;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.http.ProdutosByIdTask;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.model.Constantes;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.model.Produto;
@@ -58,25 +59,25 @@ public class DetalheProdutoFragment extends Fragment implements LoaderManager.Lo
         View view = inflater.inflate(R.layout.fragment_detalhe_produto, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        if(getResources().getBoolean(R.bool.phone)) {
+            Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
+            ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+            ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
+            if (actionBar != null)
+                actionBar.setDisplayHomeAsUpEnabled(true);
 
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO adicionar aos favoritos
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+            FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //TODO adicionar aos favoritos
+                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            });
+        }
 
-        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
-        if (actionBar != null)
-            actionBar.setDisplayHomeAsUpEnabled(true);
-
-         getLoaderManager().initLoader(1, getArguments(), this);
-
+        getLoaderManager().initLoader(1, getArguments(), this);
         return view;
     }
 
@@ -90,10 +91,10 @@ public class DetalheProdutoFragment extends Fragment implements LoaderManager.Lo
     public void onLoadFinished(Loader<Produto> loader, Produto data) {
         if (data != null) {
 
-            //if(getResources().getBoolean(R.bool.phone)) {
+            if (getResources().getBoolean(R.bool.phone)) {
                 CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) getView().findViewById(R.id.toolbar_layout);
                 appBarLayout.setTitle(data.titulo);
-            //}
+            }
 
             textTitulo.setText(data.titulo);
             textPreco.setText(data.precoConvertido());

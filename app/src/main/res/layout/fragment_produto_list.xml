@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="projetomercadolivre.caioernandes.com.br.projetomercadolivre.ProdutoListFragment">
+    tools:context="projetomercadolivre.caioernandes.com.br.projetomercadolivre.fragments.ProdutoListFragment">
 
     <ListView
         android:id="@+id/listProdutos"
