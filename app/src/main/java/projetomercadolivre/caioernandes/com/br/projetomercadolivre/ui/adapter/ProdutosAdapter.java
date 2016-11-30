@@ -13,6 +13,8 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.R;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.model.Produto;
 
@@ -27,20 +29,31 @@ public class ProdutosAdapter extends ArrayAdapter<Produto> {
     public View getView(int position, View convertView, ViewGroup parent) {
         Produto produto = getItem(position);
 
+        ViewHolder viewHolder;
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_produto, parent, false);
+            viewHolder = new ViewHolder(convertView);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        ImageView imgFoto = (ImageView) convertView.findViewById(R.id.item_produto_foto);
-        TextView txtTitulo = (TextView) convertView.findViewById(R.id.item_produto_titulo);
-        TextView txtPreco = (TextView) convertView.findViewById(R.id.item_produto_preco);
-
         if (produto != null) {
-            Glide.with(getContext()).load(produto.foto).into(imgFoto);
-            txtTitulo.setText(produto.titulo);
-            txtPreco.setText(produto.precoConvertido());
+            Glide.with(getContext()).load(produto.foto).into(viewHolder.imgFoto);
+            viewHolder.txtTitulo.setText(produto.titulo);
+            viewHolder.txtPreco.setText(produto.precoConvertido());
         }
 
         return convertView;
+    }
+
+    private static class ViewHolder {
+        @BindView(R.id.item_produto_foto) ImageView imgFoto;
+        @BindView(R.id.item_produto_titulo) TextView txtTitulo;
+        @BindView(R.id.item_produto_preco) TextView txtPreco;
+
+        private ViewHolder(View parent) {
+            ButterKnife.bind(this, parent);
+            parent.setTag(this);
+        }
     }
 }
