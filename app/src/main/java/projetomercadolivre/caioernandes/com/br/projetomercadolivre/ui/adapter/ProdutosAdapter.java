@@ -46,12 +46,12 @@ public class ProdutosAdapter extends ArrayAdapter<Produto> {
         return convertView;
     }
 
-    private static class ViewHolder {
+    public static class ViewHolder {
         @BindView(R.id.item_produto_foto) ImageView imgFoto;
         @BindView(R.id.item_produto_titulo) TextView txtTitulo;
         @BindView(R.id.item_produto_preco) TextView txtPreco;
 
-        private ViewHolder(View parent) {
+        public ViewHolder(View parent) {
             ButterKnife.bind(this, parent);
             parent.setTag(this);
         }

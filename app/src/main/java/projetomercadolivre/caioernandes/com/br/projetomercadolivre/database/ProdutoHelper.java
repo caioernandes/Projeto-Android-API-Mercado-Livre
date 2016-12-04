@@ -7,8 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class ProdutoHelper extends SQLiteOpenHelper {
 
-    public static final int DB_VERSION = 1;
-    public static final String DB_NAME = "Produto";
+    private static final int DB_VERSION = 1;
+    private static final String DB_NAME = "Produto";
 
     public ProdutoHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
