@@ -27,22 +27,22 @@ public class Endereco {
         this.estado = estado;
         this.cidade = cidade;
     }
-}
 
-class Estado
-{
-    public String id;
-    public String name;
+    public class Estado
+    {
+        public String id;
+        public String name;
 
-    public Estado() {
+        public Estado() {
+        }
     }
-}
 
-class Cidade
-{
-    public String id;
-    public String name;
+    public class Cidade
+    {
+        public String id;
+        public String name;
 
-    public Cidade() {
+        public Cidade() {
+        }
     }
 }

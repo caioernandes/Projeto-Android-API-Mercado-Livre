@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import projetomercadolivre.caioernandes.com.br.projetomercadolivre.model.Constantes;
+
 
 public class ProdutoHelper extends SQLiteOpenHelper {
 
@@ -16,18 +18,7 @@ public class ProdutoHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " + ProdutoContract.TABLE_NAME + " (" +
-                ProdutoContract._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                ProdutoContract.TITULO + " TEXT NOT NULL, " +
-                ProdutoContract.PRECO + " REAL NOT NULL, " +
-                ProdutoContract.CONDICAO + " TEXT NOT NULL, " +
-                ProdutoContract.FOTO + " TEXT NOT NULL, " +
-                ProdutoContract.ACEITA_MERCADO_PAGO + " INTEGER NOT NULL, " +
-                ProdutoContract.LATITUDE + " TEXT NOT NULL, " +
-                ProdutoContract.LONGITUDE + " TEXT NOT NULL, " +
-                ProdutoContract.ESTADO + " TEXT NOT NULL, " +
-                ProdutoContract.CIDADE + " TEXT NOT NULL, " +
-                ProdutoContract.QTD_DISPONIVEL + " TEXT NOT NULL)");
+        db.execSQL(Constantes.CREATE_TB_PRODUTOS);
     }
 
     @Override

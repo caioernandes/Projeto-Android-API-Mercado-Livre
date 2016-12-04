@@ -5,7 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.model.Produto;
+
+import static android.R.attr.id;
 
 
 public class ProdutoDAL {
@@ -17,73 +22,149 @@ public class ProdutoDAL {
     }
 
     public long inserir(Produto produto) {
-        ProdutoHelper helper = new ProdutoHelper(mContext);
-        SQLiteDatabase db = helper.getWritableDatabase();
-        ContentValues values = valuesFromProduto(produto);
-        long id = db.insert(ProdutoContract.TABLE_NAME, null, values);
-        produto.id = Long.toString(id);
 
-        db.close();
+        if(produto != null) {
+            ProdutoHelper helper = new ProdutoHelper(mContext);
+            SQLiteDatabase db = helper.getWritableDatabase();
+            ContentValues values = valuesFromProduto(produto);
+
+            try {
+                long id = db.insert(ProdutoContract.TABLE_NAME, null, values);
+                produto.id = Long.toString(id);
+            } finally {
+                db.close();
+            }
+        }
 
         return id;
     }
 
     public int atualizar(Produto produto) {
-        ProdutoHelper helper = new ProdutoHelper(mContext);
-        SQLiteDatabase db = helper.getWritableDatabase();
-        ContentValues values = valuesFromProduto(produto);
-        int rowsAffected = db.update(ProdutoContract.TABLE_NAME, values, ProdutoContract._ID + " = ?",
-                new String[] {String.valueOf(produto.id)});
 
-        db.close();
+        int result = -1;
 
-        return rowsAffected;
+        if(produto != null) {
+            ProdutoHelper helper = new ProdutoHelper(mContext);
+            SQLiteDatabase db = helper.getWritableDatabase();
+            ContentValues values = valuesFromProduto(produto);
+
+            try {
+                result = db.update(ProdutoContract.TABLE_NAME, values, ProdutoContract._ID + " = ?",
+                        new String[] {String.valueOf(produto.id)});
+            } finally {
+                db.close();
+            }
+        }
+
+        return result;
     }
 
     public int excluir(Produto produto) {
+
+        int result = -1;
+
+        if(produto != null) {
         ProdutoHelper helper = new ProdutoHelper(mContext);
         SQLiteDatabase db = helper.getWritableDatabase();
 
-        int rowsAffected = db.delete(ProdutoContract.TABLE_NAME, ProdutoContract.LINK_COMPRA + " = ?",
-                new String[] {String.valueOf(produto.linkCompra)});
+            try {
+                result = db.delete(ProdutoContract.TABLE_NAME, ProdutoContract._ID + " = ?",
+                        new String[] {String.valueOf(produto.id)});
+            } finally {
+                db.close();
+            }
+        }
 
-        db.close();
-
-        return rowsAffected;
+        return result;
     }
 
     public boolean isFavorito(Produto produto) {
-        ProdutoHelper helper = new ProdutoHelper(mContext);
-        SQLiteDatabase db = helper.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT count(*) FROM " + ProdutoContract.TABLE_NAME
-                        + " WHERE " + ProdutoContract.LINK_COMPRA + " = ?",
-                new String[] { produto.linkCompra });
         boolean existe = false;
-        if (cursor != null) {
-            cursor.moveToNext();
-            existe = cursor.getInt(0) > 0;
-            cursor.close();
+
+        if (produto != null) {
+            ProdutoHelper helper = new ProdutoHelper(mContext);
+            SQLiteDatabase db = helper.getReadableDatabase();
+
+            try {
+                Cursor cursor = db.rawQuery("SELECT count(*) FROM " + ProdutoContract.TABLE_NAME
+                        + " WHERE " + ProdutoContract._ID + " = ?", new String[] { produto.id });
+
+                if (cursor != null) {
+                    cursor.moveToNext();
+                    existe = cursor.getInt(0) > 0;
+                    cursor.close();
+                }
+            } finally {
+                db.close();
+            }
         }
-        db.close();
+
         return existe;
     }
 
-    /*/ Faltando apenas criar o método de listar  /**/
+
+    public List<Produto> listar() {
+        ProdutoHelper helper = new ProdutoHelper(mContext);
+        SQLiteDatabase db = helper.getReadableDatabase();
+        List<Produto> produtos = new ArrayList<>();
+
+        try {
+            Cursor cursor = db.rawQuery("SELECT * FROM " + ProdutoContract.TABLE_NAME, null);
+            if (cursor.getCount() > 0) {
+                int idxId = cursor.getColumnIndex(ProdutoContract._ID);
+                int idxTitulo = cursor.getColumnIndex(ProdutoContract.TITULO);
+                int idxPreco = cursor.getColumnIndex(ProdutoContract.PRECO);
+                int idxCondicao = cursor.getColumnIndex(ProdutoContract.CONDICAO);
+                int idxLinkCompra = cursor.getColumnIndex(ProdutoContract.LINK_COMPRA);
+                int idxFoto = cursor.getColumnIndex(ProdutoContract.FOTO);
+                int idxLatitude = cursor.getColumnIndex(ProdutoContract.LATITUDE);
+                int idxLongitude = cursor.getColumnIndex(ProdutoContract.LONGITUDE);
+                int idxEstado = cursor.getColumnIndex(ProdutoContract.ESTADO);
+                int idxCidade = cursor.getColumnIndex(ProdutoContract.CIDADE);
+
+                while (cursor.moveToNext()) {
+                    Produto produto = new Produto();
+                    produto.id = cursor.getString(idxId);
+                    produto.titulo = cursor.getString(idxTitulo);
+                    produto.preco = cursor.getDouble(idxPreco);
+                    produto.condicao = cursor.getString(idxCondicao);
+                    produto.linkCompra = cursor.getString(idxLinkCompra);
+                    produto.foto = cursor.getString(idxFoto);
+                    produto.endereco.latitude = cursor.getString(idxLatitude);
+                    produto.endereco.longitude = cursor.getString(idxLongitude);
+                    produto.endereco.estado.name = cursor.getString(idxEstado);
+                    produto.endereco.cidade.name = cursor.getString(idxCidade);
+
+                    produtos.add(produto);
+                }
+            }
+            cursor.close();
+        } finally {
+            db.close();
+        }
+
+        return produtos;
+    }
 
     private ContentValues valuesFromProduto(Produto produto) {
-        ContentValues values = new ContentValues();
-        values.put(ProdutoContract.TITULO, produto.titulo);
-        values.put(ProdutoContract.PRECO, produto.precoConvertido());
-        values.put(ProdutoContract.CONDICAO, produto.condicao);
-        values.put(ProdutoContract.LINK_COMPRA, produto.linkCompra);
-        values.put(ProdutoContract.FOTO, produto.foto);
-        values.put(ProdutoContract.ACEITA_MERCADO_PAGO, produto.aceitaMercadoPago);
-        values.put(ProdutoContract.QTD_DISPONIVEL, produto.quantidadeDisponivel());
-        values.put(ProdutoContract.LATITUDE, produto.foto);
-        values.put(ProdutoContract.LONGITUDE, produto.foto);
-        values.put(ProdutoContract.ESTADO, produto.foto);
-        values.put(ProdutoContract.CIDADE, produto.foto);
+
+        ContentValues values = null;
+
+        if (produto != null) {
+            values = new ContentValues();
+            values.put(ProdutoContract.TITULO, produto.titulo);
+            values.put(ProdutoContract.PRECO, produto.precoConvertido());
+            values.put(ProdutoContract.CONDICAO, produto.condicao);
+            values.put(ProdutoContract.LINK_COMPRA, produto.linkCompra);
+            values.put(ProdutoContract.FOTO, produto.foto);
+            values.put(ProdutoContract.ACEITA_MERCADO_PAGO, produto.aceitaMercadoPago);
+            values.put(ProdutoContract.QTD_DISPONIVEL, produto.quantidadeDisponivel());
+            values.put(ProdutoContract.LATITUDE, produto.foto);
+            values.put(ProdutoContract.LONGITUDE, produto.foto);
+            values.put(ProdutoContract.ESTADO, produto.foto);
+            values.put(ProdutoContract.CIDADE, produto.foto);
+        }
 
         return values;
     }
