@@ -15,10 +15,19 @@ import static android.R.attr.id;
 
 public class ProdutoDAL {
 
+    private static ProdutoDAL instance;
     private Context mContext;
 
     public ProdutoDAL(Context context) {
         this.mContext = context;
+    }
+
+    public static synchronized ProdutoDAL getInstance(Context context) {
+        if (instance == null) {
+            instance = new ProdutoDAL(context);
+        }
+
+        return instance;
     }
 
     public long inserir(Produto produto) {

@@ -1,11 +1,11 @@
 package projetomercadolivre.caioernandes.com.br.projetomercadolivre.fragments;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -25,6 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.R;
+import projetomercadolivre.caioernandes.com.br.projetomercadolivre.database.ProdutoDAL;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.http.ProdutosByIdTask;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.model.Constantes;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.model.Produto;
@@ -36,8 +37,13 @@ public class DetalheProdutoFragment extends Fragment implements LoaderManager.Lo
     @BindView(R.id.text_preco) TextView textPreco;
     @BindView(R.id.text_qtd) TextView textQuantidade;
     @Nullable @BindView(R.id.image_foto) ImageView imageFoto;
-
+    @BindView(R.id.fab) FloatingActionButton fab;
     private Unbinder unbinder;
+
+    Produto produto;
+    ProdutoDAL produtoDAL;
+    boolean isFavorite;
+
 
     public static DetalheProdutoFragment newInstance(String produtoId) {
         Bundle bundle = new Bundle();
@@ -66,19 +72,41 @@ public class DetalheProdutoFragment extends Fragment implements LoaderManager.Lo
             if (actionBar != null)
                 actionBar.setDisplayHomeAsUpEnabled(true);
 
-            FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    saveOrRemoveFavorite();
+
                     //TODO adicionar aos favoritos
-                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();*/
                 }
             });
         }
 
         getLoaderManager().initLoader(1, getArguments(), this);
+
+        produtoDAL = ProdutoDAL.getInstance(getActivity().getApplication().getApplicationContext());
+
         return view;
+    }
+
+    public void saveOrRemoveFavorite() {
+        if (isFavorite) {
+            produtoDAL.excluir(produto);
+            isFavorite = false;
+        } else {
+            produtoDAL.inserir(produto);
+            isFavorite = true;
+        }
+
+        changeFloatingButton();
+    }
+
+    public void changeFloatingButton() {
+        int resource = isFavorite ? R.drawable.is_favorite : R.drawable.is_no_favorite;
+        fab.setImageResource(resource);
+        fab.setBackgroundColor(Color.parseColor("#FCAF19"));
     }
 
     @Override
