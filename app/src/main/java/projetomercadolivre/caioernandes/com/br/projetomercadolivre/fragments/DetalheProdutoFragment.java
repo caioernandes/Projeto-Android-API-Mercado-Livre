@@ -38,12 +38,11 @@ public class DetalheProdutoFragment extends Fragment implements LoaderManager.Lo
     @BindView(R.id.text_qtd) TextView textQuantidade;
     @Nullable @BindView(R.id.image_foto) ImageView imageFoto;
     @BindView(R.id.fab) FloatingActionButton fab;
-    private Unbinder unbinder;
 
+    private Unbinder unbinder;
     Produto produto;
     ProdutoDAL produtoDAL;
     boolean isFavorite;
-
 
     public static DetalheProdutoFragment newInstance(String produtoId) {
         Bundle bundle = new Bundle();
@@ -56,7 +55,6 @@ public class DetalheProdutoFragment extends Fragment implements LoaderManager.Lo
 
     public DetalheProdutoFragment() {
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
