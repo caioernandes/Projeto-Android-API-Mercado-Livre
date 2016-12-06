@@ -19,7 +19,6 @@
         </activity>
         <activity
             android:name=".activities.DetalheProdutoActivity"
-            android:label="@string/title_activity_detalhe_produto"
             android:parentActivityName=".activities.ProdutosActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

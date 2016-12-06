@@ -21,10 +21,13 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.R;
+import projetomercadolivre.caioernandes.com.br.projetomercadolivre.database.DatabaseEvent;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.database.ProdutoDAL;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.http.ProdutosByIdTask;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.model.Constantes;
@@ -99,6 +102,7 @@ public class DetalheProdutoFragment extends Fragment implements LoaderManager.Lo
         }
 
         changeFloatingButton();
+        EventBus.getDefault().post(new DatabaseEvent());
     }
 
     public void changeFloatingButton() {

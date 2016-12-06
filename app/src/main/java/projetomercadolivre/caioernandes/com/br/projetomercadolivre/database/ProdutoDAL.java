@@ -10,8 +10,6 @@ import java.util.List;
 
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.model.Produto;
 
-import static android.R.attr.id;
-
 
 public class ProdutoDAL {
 
@@ -32,20 +30,21 @@ public class ProdutoDAL {
 
     public long inserir(Produto produto) {
 
+        long result = -1;
+
         if(produto != null) {
             ProdutoHelper helper = new ProdutoHelper(mContext);
             SQLiteDatabase db = helper.getWritableDatabase();
             ContentValues values = valuesFromProduto(produto);
 
             try {
-                long id = db.insert(ProdutoContract.TABLE_NAME, null, values);
-                produto.id = Long.toString(id);
+                result = db.insert(ProdutoContract.TABLE_NAME, null, values);
             } finally {
                 db.close();
             }
         }
 
-        return id;
+        return result;
     }
 
     public int atualizar(Produto produto) {
@@ -77,8 +76,8 @@ public class ProdutoDAL {
         SQLiteDatabase db = helper.getWritableDatabase();
 
             try {
-                result = db.delete(ProdutoContract.TABLE_NAME, ProdutoContract._ID + " = ?",
-                        new String[] {String.valueOf(produto.id)});
+                result = db.delete(ProdutoContract.TABLE_NAME, ProdutoContract._ID + " = ? ",
+                        new String[] {produto.id});
             } finally {
                 db.close();
             }
@@ -112,43 +111,37 @@ public class ProdutoDAL {
         return existe;
     }
 
+    public Produto getProduto(Produto produto) {
+        Produto result = null;
+
+        if (produto != null) {
+            ProdutoHelper helper = new ProdutoHelper(mContext);
+            SQLiteDatabase db = helper.getReadableDatabase();
+
+            Cursor c = db.rawQuery("SELECT * FROM " + ProdutoContract.TABLE_NAME + " where " +
+                    ProdutoContract._ID + " = ?", new String[] { produto.id });
+
+            if (c.moveToFirst()) {
+                result = getProdutoFromCursor(c);
+            }
+        }
+
+        return result;
+    }
+
 
     public List<Produto> listar() {
-        ProdutoHelper helper = new ProdutoHelper(mContext);
-        SQLiteDatabase db = helper.getReadableDatabase();
         List<Produto> produtos = new ArrayList<>();
 
+        ProdutoHelper helper = new ProdutoHelper(mContext);
+        SQLiteDatabase db = helper.getReadableDatabase();
+
         try {
-            Cursor cursor = db.rawQuery("SELECT * FROM " + ProdutoContract.TABLE_NAME, null);
-            if (cursor.getCount() > 0) {
-                int idxId = cursor.getColumnIndex(ProdutoContract._ID);
-                int idxTitulo = cursor.getColumnIndex(ProdutoContract.TITULO);
-                int idxPreco = cursor.getColumnIndex(ProdutoContract.PRECO);
-                int idxCondicao = cursor.getColumnIndex(ProdutoContract.CONDICAO);
-                int idxLinkCompra = cursor.getColumnIndex(ProdutoContract.LINK_COMPRA);
-                int idxFoto = cursor.getColumnIndex(ProdutoContract.FOTO);
-                int idxLatitude = cursor.getColumnIndex(ProdutoContract.LATITUDE);
-                int idxLongitude = cursor.getColumnIndex(ProdutoContract.LONGITUDE);
-                int idxEstado = cursor.getColumnIndex(ProdutoContract.ESTADO);
-                int idxCidade = cursor.getColumnIndex(ProdutoContract.CIDADE);
+            Cursor c = db.rawQuery("SELECT * FROM " + ProdutoContract.TABLE_NAME, null);
 
-                while (cursor.moveToNext()) {
-                    Produto produto = new Produto();
-                    produto.id = cursor.getString(idxId);
-                    produto.titulo = cursor.getString(idxTitulo);
-                    produto.preco = cursor.getDouble(idxPreco);
-                    produto.condicao = cursor.getString(idxCondicao);
-                    produto.linkCompra = cursor.getString(idxLinkCompra);
-                    produto.foto = cursor.getString(idxFoto);
-                    produto.endereco.latitude = cursor.getString(idxLatitude);
-                    produto.endereco.longitude = cursor.getString(idxLongitude);
-                    produto.endereco.estado.name = cursor.getString(idxEstado);
-                    produto.endereco.cidade.name = cursor.getString(idxCidade);
-
-                    produtos.add(produto);
-                }
+            while(c.moveToNext()) {
+                produtos.add(getProdutoFromCursor(c));
             }
-            cursor.close();
         } finally {
             db.close();
         }
@@ -176,5 +169,32 @@ public class ProdutoDAL {
         }
 
         return values;
+    }
+
+    public Produto getProdutoFromCursor(Cursor cursor) {
+        int idxId = cursor.getColumnIndex(ProdutoContract._ID);
+        int idxTitulo = cursor.getColumnIndex(ProdutoContract.TITULO);
+        int idxPreco = cursor.getColumnIndex(ProdutoContract.PRECO);
+        int idxCondicao = cursor.getColumnIndex(ProdutoContract.CONDICAO);
+        int idxLinkCompra = cursor.getColumnIndex(ProdutoContract.LINK_COMPRA);
+        int idxFoto = cursor.getColumnIndex(ProdutoContract.FOTO);
+        int idxLatitude = cursor.getColumnIndex(ProdutoContract.LATITUDE);
+        int idxLongitude = cursor.getColumnIndex(ProdutoContract.LONGITUDE);
+        int idxEstado = cursor.getColumnIndex(ProdutoContract.ESTADO);
+        int idxCidade = cursor.getColumnIndex(ProdutoContract.CIDADE);
+
+        Produto produto = new Produto();
+        produto.id = cursor.getString(idxId);
+        produto.titulo = cursor.getString(idxTitulo);
+        produto.preco = cursor.getDouble(idxPreco);
+        produto.condicao = cursor.getString(idxCondicao);
+        produto.linkCompra = cursor.getString(idxLinkCompra);
+        produto.foto = cursor.getString(idxFoto);
+        produto.endereco.latitude = cursor.getString(idxLatitude);
+        produto.endereco.longitude = cursor.getString(idxLongitude);
+        produto.endereco.estado.name = cursor.getString(idxEstado);
+        produto.endereco.cidade.name = cursor.getString(idxCidade);
+
+        return produto;
     }
 }
