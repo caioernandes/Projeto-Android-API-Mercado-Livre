@@ -21,8 +21,6 @@ public class Produto {
     public String foto;
     @SerializedName("seller_address")
     public Endereco endereco;
-    @SerializedName("accepts_mercadopago")
-    public Boolean aceitaMercadoPago;
     @SerializedName("available_quantity")
     public int quantidadeDisponivel;
 
@@ -46,7 +44,7 @@ public class Produto {
     }
 
     public Produto(String id, String titulo, double preco, String condicao, String linkCompra,
-                   String foto, Endereco endereco, Boolean aceitaMercadoPago, int quantidadeDisponivel) {
+                   String foto, Endereco endereco, int quantidadeDisponivel) {
         this.id = id;
         this.titulo = titulo;
         this.preco = preco;
@@ -54,7 +52,6 @@ public class Produto {
         this.linkCompra = linkCompra;
         this.foto = foto;
         this.endereco = endereco;
-        this.aceitaMercadoPago = aceitaMercadoPago;
         this.quantidadeDisponivel = quantidadeDisponivel;
     }
 }

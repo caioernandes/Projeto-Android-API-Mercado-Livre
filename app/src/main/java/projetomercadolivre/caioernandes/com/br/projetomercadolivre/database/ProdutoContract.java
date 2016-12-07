@@ -12,7 +12,6 @@ public interface ProdutoContract extends BaseColumns {
     String CONDICAO = "condicao";
     String LINK_COMPRA = "link_compra";
     String FOTO = "foto";
-    String ACEITA_MERCADO_PAGO = "aceita_mercado_pago";
     String QTD_DISPONIVEL = "qtd_disponivel";
     String LATITUDE = "latitude";
     String LONGITUDE = "longitude";

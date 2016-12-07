@@ -1,6 +1,8 @@
 package projetomercadolivre.caioernandes.com.br.projetomercadolivre.fragments;
 
 
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,15 +18,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import projetomercadolivre.caioernandes.com.br.projetomercadolivre.interfaces.OnProdutoClick;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.R;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.http.ProdutosSearchTask;
+import projetomercadolivre.caioernandes.com.br.projetomercadolivre.interfaces.OnProdutoClick;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.model.Produto;
 import projetomercadolivre.caioernandes.com.br.projetomercadolivre.ui.adapter.ProdutosAdapter;
 
@@ -51,6 +54,11 @@ public class ProdutoListFragment extends Fragment implements AdapterView.OnItemC
 
         View view = inflater.inflate(R.layout.fragment_produto_list, container, false);
         unbinder = ButterKnife.bind(this, view);
+
+        if (!verificaConexao()) {
+            Toast.makeText(getActivity(), "Falha na conexão com a internet.",
+                    Toast.LENGTH_LONG).show();
+        }
 
         mListProdutos.setOnItemClickListener(this);
         mLoaderManager = getLoaderManager();
@@ -113,5 +121,18 @@ public class ProdutoListFragment extends Fragment implements AdapterView.OnItemC
     @Override public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    public  boolean verificaConexao() {
+        boolean conectado;
+        ConnectivityManager conectivtyManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (conectivtyManager.getActiveNetworkInfo() != null
+                && conectivtyManager.getActiveNetworkInfo().isAvailable()
+                && conectivtyManager.getActiveNetworkInfo().isConnected()) {
+            conectado = true;
+        } else {
+            conectado = false;
+        }
+        return conectado;
     }
 }

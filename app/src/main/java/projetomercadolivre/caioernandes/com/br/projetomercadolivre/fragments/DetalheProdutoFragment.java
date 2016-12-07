@@ -1,7 +1,9 @@
 package projetomercadolivre.caioernandes.com.br.projetomercadolivre.fragments;
 
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -15,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +43,9 @@ public class DetalheProdutoFragment extends Fragment implements LoaderManager.Lo
     @BindView(R.id.text_titulo) TextView textTitulo;
     @BindView(R.id.text_preco) TextView textPreco;
     @BindView(R.id.text_qtd) TextView textQuantidade;
+    @BindView(R.id.btn_comprar) Button btnComprar;
+
+
     @Nullable @BindView(R.id.image_foto) ImageView imageFoto;
     @BindView(R.id.fab) FloatingActionButton fab;
 
@@ -90,6 +96,14 @@ public class DetalheProdutoFragment extends Fragment implements LoaderManager.Lo
             updateUI(produto, true);
         }
 
+        btnComprar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(produto.linkCompra));
+                startActivity(browserIntent);
+            }
+        });
+
         return view;
     }
 
@@ -120,8 +134,8 @@ public class DetalheProdutoFragment extends Fragment implements LoaderManager.Lo
     @Override
     public void onLoadFinished(Loader<Produto> loader, Produto data) {
         if (data != null) {
-            updateUI(data, false);
             produto = data;
+            updateUI(data, false);
         } else {
             Toast.makeText(getActivity(), "Erro ao carregar informações.", Toast.LENGTH_SHORT).show();
         }
@@ -129,11 +143,9 @@ public class DetalheProdutoFragment extends Fragment implements LoaderManager.Lo
 
     private void updateUI(Produto data, boolean isFavorite) {
         produto = data;
-
         if (getResources().getBoolean(R.bool.phone)) {
             appBarLayout.setTitle(data.titulo);
         }
-
         textTitulo.setText(data.titulo);
         textPreco.setText(data.precoConvertido());
         textQuantidade.setText(data.quantidadeDisponivel());
@@ -141,7 +153,7 @@ public class DetalheProdutoFragment extends Fragment implements LoaderManager.Lo
         if (imageFoto != null)
             Glide.with(getActivity()).load(data.foto).into(imageFoto);
 
-        changeFloatingButton(isFavorite );
+        changeFloatingButton(isFavorite);
     }
 
     @Override

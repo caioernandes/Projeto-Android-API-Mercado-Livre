@@ -11,13 +11,12 @@ public class Constantes {
     public static final String PRODUTO_ID = "produtoId";
 
     public static final String CREATE_TB_PRODUTOS = "CREATE TABLE " + ProdutoContract.TABLE_NAME + " (" +
-                        ProdutoContract._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        ProdutoContract._ID + " TEXT PRIMARY KEY, " +
                         ProdutoContract.TITULO + " TEXT NOT NULL, " +
-                        ProdutoContract.PRECO + " INTEGER, " +
+                        ProdutoContract.PRECO + " REAL, " +
                         ProdutoContract.CONDICAO + " TEXT NOT NULL, " +
                         ProdutoContract.FOTO + " TEXT NOT NULL, " +
                         ProdutoContract.LINK_COMPRA + " TEXT NOT NULL, " +
-                        ProdutoContract.ACEITA_MERCADO_PAGO + " INTEGER, " +
                         ProdutoContract.QTD_DISPONIVEL + " INTEGER, " +
                         ProdutoContract.LATITUDE + " TEXT NOT NULL, " +
                         ProdutoContract.LONGITUDE + " TEXT NOT NULL, " +
