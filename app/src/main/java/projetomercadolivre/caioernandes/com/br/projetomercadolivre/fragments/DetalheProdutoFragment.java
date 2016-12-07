@@ -36,6 +36,7 @@ import projetomercadolivre.caioernandes.com.br.projetomercadolivre.model.Produto
 
 public class DetalheProdutoFragment extends Fragment implements LoaderManager.LoaderCallbacks<Produto> {
 
+    CollapsingToolbarLayout appBarLayout;
     @BindView(R.id.text_titulo) TextView textTitulo;
     @BindView(R.id.text_preco) TextView textPreco;
     @BindView(R.id.text_qtd) TextView textQuantidade;
@@ -45,7 +46,6 @@ public class DetalheProdutoFragment extends Fragment implements LoaderManager.Lo
     private Unbinder unbinder;
     Produto produto;
     ProdutoDAL produtoDAL;
-    boolean isFavorite;
 
     public static DetalheProdutoFragment newInstance(String produtoId) {
         Bundle bundle = new Bundle();
@@ -54,9 +54,6 @@ public class DetalheProdutoFragment extends Fragment implements LoaderManager.Lo
         dmf.setArguments(bundle);
 
         return dmf;
-    }
-
-    public DetalheProdutoFragment() {
     }
 
     @Override
@@ -73,39 +70,42 @@ public class DetalheProdutoFragment extends Fragment implements LoaderManager.Lo
             if (actionBar != null)
                 actionBar.setDisplayHomeAsUpEnabled(true);
 
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    saveOrRemoveFavorite();
-
-                    //TODO adicionar aos favoritos
-                    /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();*/
-                }
-            });
+            appBarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.toolbar_layout);
         }
 
-        getLoaderManager().initLoader(1, getArguments(), this);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveOrRemoveFavorite();
+            }
+        });
 
         produtoDAL = ProdutoDAL.getInstance(getActivity().getApplication().getApplicationContext());
+
+        String produtoId = getArguments().getString(Constantes.PRODUTO_ID);
+        produto = produtoDAL.getProduto(produtoId);
+        if (produto == null) {
+            getLoaderManager().initLoader(1, getArguments(), this);
+        } else {
+            updateUI(produto, true);
+        }
 
         return view;
     }
 
     public void saveOrRemoveFavorite() {
-        if (isFavorite) {
+        Produto tempProduto = produtoDAL.getProduto(produto.id);
+        if (tempProduto != null) {
             produtoDAL.excluir(produto);
-            isFavorite = false;
+            changeFloatingButton(false);
         } else {
             produtoDAL.inserir(produto);
-            isFavorite = true;
+            changeFloatingButton(true);
         }
-
-        changeFloatingButton();
         EventBus.getDefault().post(new DatabaseEvent());
     }
 
-    public void changeFloatingButton() {
+    public void changeFloatingButton(boolean isFavorite) {
         int resource = isFavorite ? R.drawable.is_favorite : R.drawable.is_no_favorite;
         fab.setImageResource(resource);
         fab.setBackgroundColor(Color.parseColor("#FCAF19"));
@@ -120,21 +120,28 @@ public class DetalheProdutoFragment extends Fragment implements LoaderManager.Lo
     @Override
     public void onLoadFinished(Loader<Produto> loader, Produto data) {
         if (data != null) {
-
-            if (getResources().getBoolean(R.bool.phone)) {
-                CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) getView().findViewById(R.id.toolbar_layout);
-                appBarLayout.setTitle(data.titulo);
-            }
-
-            textTitulo.setText(data.titulo);
-            textPreco.setText(data.precoConvertido());
-            textQuantidade.setText(data.quantidadeDisponivel());
-
-            if (imageFoto != null)
-                Glide.with(getActivity()).load(data.foto).into(imageFoto);
+            updateUI(data, false);
+            produto = data;
         } else {
             Toast.makeText(getActivity(), "Erro ao carregar informações.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void updateUI(Produto data, boolean isFavorite) {
+        produto = data;
+
+        if (getResources().getBoolean(R.bool.phone)) {
+            appBarLayout.setTitle(data.titulo);
+        }
+
+        textTitulo.setText(data.titulo);
+        textPreco.setText(data.precoConvertido());
+        textQuantidade.setText(data.quantidadeDisponivel());
+
+        if (imageFoto != null)
+            Glide.with(getActivity()).load(data.foto).into(imageFoto);
+
+        changeFloatingButton(isFavorite );
     }
 
     @Override

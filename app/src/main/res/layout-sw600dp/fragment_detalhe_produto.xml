@@ -9,29 +9,47 @@
     tools:context="projetomercadolivre.caioernandes.com.br.projetomercadolivre.activities.DetalheProdutoActivity"
     tools:showIn="@layout/activity_detalhe_produto">
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:padding="8dp"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <ImageView
+        android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                android:id="@+id/image_foto"/>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/fab_margin"
+                android:layout_gravity="bottom|right"
+                android:layout_below="@+id/image_foto"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"/>
+
+        <LinearLayout
+            android:layout_below="@+id/image_foto"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop"
-            android:id="@+id/image_foto"/>
-        <TextView
-            android:layout_width="287dp"
             android:layout_height="wrap_content"
-            android:id="@+id/text_titulo" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/text_preco" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/text_qtd" />
-    </LinearLayout>
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="287dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/text_titulo" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/text_preco" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/text_qtd" />
+        </LinearLayout>
+    </RelativeLayout>
 
 </android.support.v4.widget.NestedScrollView>

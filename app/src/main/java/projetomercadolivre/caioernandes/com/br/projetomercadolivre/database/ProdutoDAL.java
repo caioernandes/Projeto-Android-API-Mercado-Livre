@@ -39,6 +39,8 @@ public class ProdutoDAL {
 
             try {
                 result = db.insert(ProdutoContract.TABLE_NAME, null, values);
+            } catch (Exception e) {
+                e.printStackTrace();
             } finally {
                 db.close();
             }
@@ -59,6 +61,8 @@ public class ProdutoDAL {
             try {
                 result = db.update(ProdutoContract.TABLE_NAME, values, ProdutoContract._ID + " = ?",
                         new String[] {String.valueOf(produto.id)});
+            } catch (Exception e) {
+                e.printStackTrace();
             } finally {
                 db.close();
             }
@@ -78,6 +82,8 @@ public class ProdutoDAL {
             try {
                 result = db.delete(ProdutoContract.TABLE_NAME, ProdutoContract._ID + " = ? ",
                         new String[] {produto.id});
+            } catch (Exception e) {
+                e.printStackTrace();
             } finally {
                 db.close();
             }
@@ -103,6 +109,8 @@ public class ProdutoDAL {
                     existe = cursor.getInt(0) > 0;
                     cursor.close();
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             } finally {
                 db.close();
             }
@@ -111,15 +119,15 @@ public class ProdutoDAL {
         return existe;
     }
 
-    public Produto getProduto(Produto produto) {
+    public Produto getProduto(String produtoId) {
         Produto result = null;
 
-        if (produto != null) {
+        if (produtoId != null) {
             ProdutoHelper helper = new ProdutoHelper(mContext);
             SQLiteDatabase db = helper.getReadableDatabase();
 
             Cursor c = db.rawQuery("SELECT * FROM " + ProdutoContract.TABLE_NAME + " where " +
-                    ProdutoContract._ID + " = ?", new String[] { produto.id });
+                    ProdutoContract._ID + " = ?", new String[] { produtoId });
 
             if (c.moveToFirst()) {
                 result = getProdutoFromCursor(c);
@@ -142,6 +150,8 @@ public class ProdutoDAL {
             while(c.moveToNext()) {
                 produtos.add(getProdutoFromCursor(c));
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             db.close();
         }
@@ -158,8 +168,8 @@ public class ProdutoDAL {
             values.put(ProdutoContract.TITULO, produto.titulo);
             values.put(ProdutoContract.PRECO, produto.precoConvertido());
             values.put(ProdutoContract.CONDICAO, produto.condicao);
-            values.put(ProdutoContract.LINK_COMPRA, produto.linkCompra);
             values.put(ProdutoContract.FOTO, produto.foto);
+            values.put(ProdutoContract.LINK_COMPRA, produto.linkCompra);
             values.put(ProdutoContract.ACEITA_MERCADO_PAGO, produto.aceitaMercadoPago);
             values.put(ProdutoContract.QTD_DISPONIVEL, produto.quantidadeDisponivel());
             values.put(ProdutoContract.LATITUDE, produto.foto);
@@ -172,28 +182,19 @@ public class ProdutoDAL {
     }
 
     public Produto getProdutoFromCursor(Cursor cursor) {
-        int idxId = cursor.getColumnIndex(ProdutoContract._ID);
-        int idxTitulo = cursor.getColumnIndex(ProdutoContract.TITULO);
-        int idxPreco = cursor.getColumnIndex(ProdutoContract.PRECO);
-        int idxCondicao = cursor.getColumnIndex(ProdutoContract.CONDICAO);
-        int idxLinkCompra = cursor.getColumnIndex(ProdutoContract.LINK_COMPRA);
-        int idxFoto = cursor.getColumnIndex(ProdutoContract.FOTO);
-        int idxLatitude = cursor.getColumnIndex(ProdutoContract.LATITUDE);
-        int idxLongitude = cursor.getColumnIndex(ProdutoContract.LONGITUDE);
-        int idxEstado = cursor.getColumnIndex(ProdutoContract.ESTADO);
-        int idxCidade = cursor.getColumnIndex(ProdutoContract.CIDADE);
-
         Produto produto = new Produto();
-        produto.id = cursor.getString(idxId);
-        produto.titulo = cursor.getString(idxTitulo);
-        produto.preco = cursor.getDouble(idxPreco);
-        produto.condicao = cursor.getString(idxCondicao);
-        produto.linkCompra = cursor.getString(idxLinkCompra);
-        produto.foto = cursor.getString(idxFoto);
-        produto.endereco.latitude = cursor.getString(idxLatitude);
-        produto.endereco.longitude = cursor.getString(idxLongitude);
-        produto.endereco.estado.name = cursor.getString(idxEstado);
-        produto.endereco.cidade.name = cursor.getString(idxCidade);
+        if (cursor != null) {
+            produto.id = cursor.getString(cursor.getColumnIndex(ProdutoContract._ID));
+            produto.titulo = cursor.getString(cursor.getColumnIndex(ProdutoContract.TITULO));
+            produto.preco = cursor.getDouble(cursor.getColumnIndex(ProdutoContract.PRECO));
+            produto.condicao = cursor.getString(cursor.getColumnIndex(ProdutoContract.CONDICAO));
+            produto.linkCompra = cursor.getString(cursor.getColumnIndex(ProdutoContract.LINK_COMPRA));
+            produto.foto = cursor.getString(cursor.getColumnIndex(ProdutoContract.FOTO));
+            produto.endereco.latitude = cursor.getString(cursor.getColumnIndex(ProdutoContract.LATITUDE));
+            produto.endereco.longitude = cursor.getString(cursor.getColumnIndex(ProdutoContract.LONGITUDE));
+            produto.endereco.estado.name = cursor.getString(cursor.getColumnIndex(ProdutoContract.ESTADO));
+            produto.endereco.cidade.name = cursor.getString(cursor.getColumnIndex(ProdutoContract.CIDADE));
+        }
 
         return produto;
     }

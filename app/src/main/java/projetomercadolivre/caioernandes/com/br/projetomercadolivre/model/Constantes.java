@@ -13,13 +13,14 @@ public class Constantes {
     public static final String CREATE_TB_PRODUTOS = "CREATE TABLE " + ProdutoContract.TABLE_NAME + " (" +
                         ProdutoContract._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         ProdutoContract.TITULO + " TEXT NOT NULL, " +
-                        ProdutoContract.PRECO + " REAL NOT NULL, " +
+                        ProdutoContract.PRECO + " INTEGER, " +
                         ProdutoContract.CONDICAO + " TEXT NOT NULL, " +
                         ProdutoContract.FOTO + " TEXT NOT NULL, " +
-                        ProdutoContract.ACEITA_MERCADO_PAGO + " INTEGER NOT NULL, " +
+                        ProdutoContract.LINK_COMPRA + " TEXT NOT NULL, " +
+                        ProdutoContract.ACEITA_MERCADO_PAGO + " INTEGER, " +
+                        ProdutoContract.QTD_DISPONIVEL + " INTEGER, " +
                         ProdutoContract.LATITUDE + " TEXT NOT NULL, " +
                         ProdutoContract.LONGITUDE + " TEXT NOT NULL, " +
                         ProdutoContract.ESTADO + " TEXT NOT NULL, " +
-                        ProdutoContract.CIDADE + " TEXT NOT NULL, " +
-                        ProdutoContract.QTD_DISPONIVEL + " TEXT NOT NULL)";
+                        ProdutoContract.CIDADE + " TEXT NOT NULL)";
 }
