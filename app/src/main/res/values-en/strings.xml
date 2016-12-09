@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">API Mercado Livre</string>
+    <string name="hint_search">Search</string>
+    <string name="title_activity_detalhe_produto">DetalheProdutoActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="txt_comprar">Buy</string>
+    <string name="txt_descricao_imagem">Product of the Mercado Livre</string>
+    <string name="txt_bemvindo">Wellcome to APP Mercado Livre</string>
+    <string name="txt_sem_dados">Not found products for to show</string>
+</resources>

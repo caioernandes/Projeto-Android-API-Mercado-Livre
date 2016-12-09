@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:padding="16dp"
-        android:text="Não há dados"
+        android:text="@string/txt_sem_dados"
         android:gravity="center"
         android:id="@+id/txtNoFavoritos"
         android:layout_gravity="center_horizontal" />

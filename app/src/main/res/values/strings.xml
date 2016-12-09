@@ -2,7 +2,9 @@
     <string name="app_name">API Mercado Livre</string>
     <string name="hint_search">Buscar</string>
     <string name="title_activity_detalhe_produto">DetalheProdutoActivity</string>
-    <string name="action_settings">Settings</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_settings">Configurações</string>
     <string name="txt_comprar">Comprar</string>
+    <string name="txt_descricao_imagem">Produto do mercado livre</string>
+    <string name="txt_bemvindo">Bem-vindo ao APP Mercado Livre</string>
+    <string name="txt_sem_dados">Não há produtos para exibir</string>
 </resources>

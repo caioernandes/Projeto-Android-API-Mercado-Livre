@@ -3,6 +3,7 @@ package projetomercadolivre.caioernandes.com.br.projetomercadolivre.fragments;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -44,10 +45,11 @@ public class DetalheProdutoFragment extends Fragment implements LoaderManager.Lo
     @BindView(R.id.text_preco) TextView textPreco;
     @BindView(R.id.text_qtd) TextView textQuantidade;
     @BindView(R.id.btn_comprar) Button btnComprar;
-
-
     @Nullable @BindView(R.id.image_foto) ImageView imageFoto;
     @BindView(R.id.fab) FloatingActionButton fab;
+
+    MediaPlayer soundFavorite;
+    MediaPlayer soundNoFavorite;
 
     private Unbinder unbinder;
     Produto produto;
@@ -112,9 +114,11 @@ public class DetalheProdutoFragment extends Fragment implements LoaderManager.Lo
         if (tempProduto != null) {
             produtoDAL.excluir(produto);
             changeFloatingButton(false);
+            tocarFavorite(false);
         } else {
             produtoDAL.inserir(produto);
             changeFloatingButton(true);
+            tocarFavorite(true);
         }
         EventBus.getDefault().post(new DatabaseEvent());
     }
@@ -154,6 +158,30 @@ public class DetalheProdutoFragment extends Fragment implements LoaderManager.Lo
             Glide.with(getActivity()).load(data.foto).into(imageFoto);
 
         changeFloatingButton(isFavorite);
+    }
+
+    public void tocarFavorite(boolean isFavorite) {
+
+        soundFavorite = MediaPlayer.create(getContext(), R.raw.favorite);
+        soundNoFavorite = MediaPlayer.create(getContext(), R.raw.no_favorite);
+
+        try {
+            if (isFavorite) {
+                if (soundNoFavorite.isPlaying()) {
+                    soundNoFavorite.release();
+                    soundNoFavorite.stop();
+                }
+                soundFavorite.start();
+            } else {
+                if (soundFavorite.isPlaying()) {
+                    soundFavorite.release();
+                    soundFavorite.stop();
+                }
+                soundNoFavorite.start();
+            }
+        } catch (Exception e) {
+            Toast.makeText(getContext(), "Erro ao executar som do Google Tradutor.", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

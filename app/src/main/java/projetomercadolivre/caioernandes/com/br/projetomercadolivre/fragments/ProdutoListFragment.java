@@ -34,7 +34,9 @@ import projetomercadolivre.caioernandes.com.br.projetomercadolivre.ui.adapter.Pr
 
 public class ProdutoListFragment extends Fragment implements AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<List<Produto>>, SearchView.OnQueryTextListener {
 
-    @BindView(R.id.listProdutos) ListView mListProdutos;
+    @BindView(R.id.listProdutos)
+    ListView mListProdutos;
+
     LoaderManager mLoaderManager;
 
     private Unbinder unbinder;

@@ -4,6 +4,8 @@
     android:layout_height="match_parent"
     tools:context="projetomercadolivre.caioernandes.com.br.projetomercadolivre.fragments.ProdutosFavoritosFragment">
 
+    <include layout="@layout/no_favoritos" />
+
     <ListView
         android:id="@+id/list_produto"
         android:layout_width="match_parent"

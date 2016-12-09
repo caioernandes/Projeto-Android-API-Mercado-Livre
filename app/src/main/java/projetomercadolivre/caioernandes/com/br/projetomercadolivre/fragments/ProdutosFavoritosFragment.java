@@ -31,6 +31,9 @@ public class ProdutosFavoritosFragment extends Fragment {
     @BindView(R.id.list_produto)
     ListView mListProdutos;
 
+    @BindView(R.id.no_favoritos)
+    View mEmpty;
+
     List<Produto> mProdutos;
 
     @Override
@@ -63,6 +66,7 @@ public class ProdutosFavoritosFragment extends Fragment {
     private void updateList() {
         mProdutos = ProdutoDAL.getInstance(getActivity().getApplication().getApplicationContext()).listar();
         mListProdutos.setAdapter(new ProdutosAdapter(getActivity(), mProdutos));
+        mListProdutos.setEmptyView(mEmpty);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
